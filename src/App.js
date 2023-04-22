@@ -1,25 +1,36 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from'react';
 import './App.css';
+import People from './People';
 
-function App() {
+export default function App() {
+  const [peoples, setPeoples] = useState([]);
+  
+  
+  useEffect(() => {
+  console.log('mounted')
+  fetch('https://randomuser.me/api?results=25')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data)
+    setPeoples(data.results)
+});
+}, []);
+
+useEffect(() => {
+  console.log('updated', peoples);
+}, [peoples]);
+  
+  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ul className='people'>
+        {peoples.map((people => {
+          return <People data={people} />
+        })
+      )}
+      
+      </ul>
     </div>
   );
 }
-
-export default App;
